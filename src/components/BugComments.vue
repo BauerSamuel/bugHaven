@@ -1,28 +1,28 @@
 <template>
   <div class="bug-comments row">
-    <div class="col-12">
+    <div class="col-12 text-left">
       <form @submit.prevent="addComment">
-        <input type="text" v-model="comment.creator" placeholder="Created by...">
-        <p>Comments</p>
+        <span>Name</span><br>
+        <input type="text" v-model="comment.creator" placeholder="Created by..."><br><br>
         <textarea rows="5" cols="60" type="text" v-model="comment.content" placeholder="Write comment here..."
-          required></textarea>
-        <button>Submit Comment</button>
+          required></textarea><br>
+        <button type="button" class="btn btn-outline-success">Submit Comment</button>
       </form>
     </div>
-    <div class="col-12">
-      <table class="table">
+    <div class="col-8 offset-2 text-left">
+      <table v-if="this.$store.state.comments.length != 0" class="table">
         <thead class="thead-light">
           <th scope="col">Creator</th>
-          <th scope="col">Messgae</th>
+          <th scope="col">Message</th>
           <th scope="col">Status</th>
         </thead>
         <tbody v-for="comment in comments">
           <tr>
             <td>{{comment.creator}}</td>
             <td>{{comment.content}}</td>
-            <!-- <td v-if="bug.closed">closed</td>
-            <td v-else>active</td> -->
             <td>{{comment.flagged}}</td>
+            <td><button @click="deleteComment(comment)" type="button" class="btn btn-outline-danger">Delete</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -52,11 +52,18 @@
     computed: {
       comments() {
         return this.$store.state.comments
+      },
+      bug() {
+        return this.$store.state.bugs.find(b => b._id == this.bugId)
       }
     },
     methods: {
       addComment() {
         this.$store.dispatch('addComment', this.comment)
+      },
+      deleteComment(comment) {
+        console.log(comment)
+        this.$store.dispatch('deleteComment', comment)
       }
     },
     components: {

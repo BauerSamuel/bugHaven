@@ -11,10 +11,10 @@
       <p>{{bug.description}}</p>
     </div>
     <div class="col-3">
-      <button type="button" class="btn btn-outline-danger">
-        <!--Changes closed to true instead of false. Closes bug.-->
+      <button v-if="!bug.closed" @click="closer" type="button" class="btn btn-outline-danger">
         Close
       </button>
+      <button disabled class="btn btn-outline-danger" v-else>Bug fixed</button>
     </div>
   </div>
 </template>
@@ -39,7 +39,9 @@
       }
     },
     methods: {
-
+      closer() {
+        this.$store.dispatch("closer", this.bug)
+      }
     },
     components: {
     }

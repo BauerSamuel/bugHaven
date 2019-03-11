@@ -42,6 +42,13 @@ export default new Vuex.Store({
           commit('setComments', res.data.results)
         })
     },
+    closer({ commit, dispatch }, closedBug) {
+      let id = closedBug._id
+      _sandbox.delete(`bugs/${id}`, closedBug)
+        .then(res => {
+          dispatch('initialize')
+        })
+    },
     addBug({ commit, dispatch }, payload) {
       _sandbox.post('bugs', payload)
         .then(res => {
@@ -54,6 +61,14 @@ export default new Vuex.Store({
       _sandbox.post(`bugs/${id}/notes`, payload)
         .then(res => {
           dispatch('getComments', id)
+        })
+    },
+    deleteComment({ commit, dispatch }, payload) {
+      let bugId = payload.bug
+      let commentId = payload._id
+      _sandbox.delete(`bugs/${bugId}/notes/${commentId}`)
+        .then(res => {
+          dispatch('getComments', bugId)
         })
     }
   }

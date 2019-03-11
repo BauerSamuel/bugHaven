@@ -3,8 +3,8 @@
 <template>
   <div class="myBugs row">
     <div class="col-12">
-      <!--Table with lables for List: title, reported by, status, date.-->
-
+      <!--<button @click="!this.sorted" type="button" class="btn button-info">Active</button>-->
+      <!--Why does this line and line 47 have issues? I don't get it.-->
       <table class="table">
         <thead class="thead-light">
           <th scope="col">Title</th>
@@ -13,7 +13,7 @@
           <th scope="col">First Posted On</th>
         </thead>
         <tbody>
-          <router-link :to="{name: 'details', params: {bugId:bug._id}}" tag="tr" v-for="bug in bugs"
+          <router-link v-if="sorted" :to="{name: 'details', params: {bugId:bug._id}}" tag="tr" v-for="bug in bugs"
             :class="{ 'table-success':bug.closed, 'table-warning':!bug.closed }">
             <td>{{bug.title}}</td>
             <td>{{bug.creator}}</td>
@@ -27,7 +27,7 @@
     </div>
     <div class="col-12 text-left">
       <form @submit.prevent="submitBug">
-        <span class="form-stuff">Name</span><br>
+        <span>Name</span><br>
         <input type="text" v-model="newBug.creator" placeholder="Who are you? Name..." required><br><br>
         <span class="form-stuff">Bug title</span><br>
         <input type="text" v-model="newBug.title" placeholder="Title of bug..." required><br><br>
@@ -45,6 +45,7 @@
     props: [],
     data() {
       return {
+        //       sorted=false, //Super annoyed I get an error from this line. Why? This isnt weird
         newBug: {
           creator: '',
           title: '',
@@ -57,18 +58,21 @@
     },
     computed: {
       bugs() {
-        return this.$store.state.bugs
+        if (!this.sorted) {
+          return this.$store.state.bugs
+        } else {
+          return this.$store.state.bugs.map(b => !b.closed)
+        }
       }
-      // activeBug() {
-      //   return this.$store.state.activeBug
-      // }
     },
     methods: {
       submitBug() {
         this.$store.dispatch('addBug', this.newBug)
       }
     },
-    components: {}
+    components: {
+
+    }
   }
 </script>
 <style>
