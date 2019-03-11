@@ -48,8 +48,6 @@
     },
     mounted() {
       let active = this.bug
-      console.log(active)
-      console.log(" " + active)
       if (this.$store.state.comments.length == 0) {
         this.$store.dispatch('getComments', this.$route.params.bugId)
       }
@@ -64,7 +62,6 @@
         this.$store.dispatch('addComment', this.comment)
       },
       deleteComment(comment) {
-        console.log(comment)
         this.$store.dispatch('deleteComment', comment)
       }
     },
