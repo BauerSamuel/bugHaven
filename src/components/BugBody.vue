@@ -22,7 +22,7 @@
 <script>
   export default {
     name: 'BugBody',
-    props: ['bugId'],
+    props: ['bug'],
     data() {
       return {
       }
@@ -34,9 +34,7 @@
       }
     },
     computed: {
-      bug() {
-        return this.$store.state.bugs.find(b => b._id == this.bugId)
-      }
+
     },
     methods: {
       closer() {

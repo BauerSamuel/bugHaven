@@ -3,8 +3,7 @@
 <template>
   <div class="myBugs row">
     <div class="col-12">
-      <!--<button @click="!this.sorted" type="button" class="btn button-info">Active</button>-->
-      <!--Why does this line and line 47 have issues? I don't get it.-->
+      <button @click="sorted = !sorted" type="button" class="btn btn-info">Active</button>
       <table class="table">
         <thead class="thead-light">
           <th scope="col">Title</th>
@@ -13,7 +12,7 @@
           <th scope="col">First Posted On</th>
         </thead>
         <tbody>
-          <router-link v-if="sorted" :to="{name: 'details', params: {bugId:bug._id}}" tag="tr" v-for="bug in bugs"
+          <router-link :to="{name: 'details', params: {bugId:bug._id}}" tag="tr" v-for="bug in bugs"
             :class="{ 'table-success':bug.closed, 'table-warning':!bug.closed }">
             <td>{{bug.title}}</td>
             <td>{{bug.creator}}</td>
@@ -45,7 +44,7 @@
     props: [],
     data() {
       return {
-        //       sorted=false, //Super annoyed I get an error from this line. Why? This isnt weird
+        sorted: false,
         newBug: {
           creator: '',
           title: '',
@@ -61,7 +60,7 @@
         if (!this.sorted) {
           return this.$store.state.bugs
         } else {
-          return this.$store.state.bugs.map(b => !b.closed)
+          return this.$store.state.bugs.filter(b => b.closed == false)
         }
       }
     },

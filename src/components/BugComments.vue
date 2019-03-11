@@ -1,7 +1,7 @@
 <template>
   <div class="bug-comments row">
     <div class="col-12 text-left">
-      <form @submit.prevent="addComment">
+      <form v-if="!bug.closed" @submit.prevent="addComment">
         <span>Name</span><br>
         <input type="text" v-model="comment.creator" placeholder="Created by..."><br><br>
         <textarea rows="5" cols="60" type="text" v-model="comment.content" placeholder="Write comment here..."
@@ -33,12 +33,12 @@
 <script>
   export default {
     name: 'BugComments',
-    props: ['bugId'],
+    props: ['bug'],
     data() {
       return {
         comment: {
           content: '',
-          bug: this.bugId,
+          bug: this.bug._id,
           creator: '',
           user: 'Admin',
           flagged: "pending"
@@ -47,15 +47,17 @@
 
     },
     mounted() {
-      this.$store.dispatch('getComments', this.bugId)
+      let active = this.bug
+      console.log(active)
+      console.log(" " + active)
+      if (this.$store.state.comments.length == 0) {
+        this.$store.dispatch('getComments', this.$route.params.bugId)
+      }
     },
     computed: {
       comments() {
         return this.$store.state.comments
       },
-      bug() {
-        return this.$store.state.bugs.find(b => b._id == this.bugId)
-      }
     },
     methods: {
       addComment() {

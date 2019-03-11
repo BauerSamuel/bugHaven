@@ -3,9 +3,9 @@
     <div v-if="bug.closed" class="Alert">
       <h1>BUG CLOSED</h1>
     </div>
-    <bug-body :bugId="bugId"></bug-body>
+    <bug-body :bug="bug"></bug-body>
     <hr>
-    <bug-comments v-if="!bug.closed" :bugId="bugId"></bug-comments>
+    <bug-comments :bug="bug"></bug-comments>
   </div>
 </template>
 
@@ -25,13 +25,10 @@
       if (this.$store.state.bugs.length == 0) {
         this.$store.dispatch('initialize')
       }
-      if (this.$store.state.comments.length == 0) {
-        this.$store.dispatch('getComments')
-      }
     },
     computed: {
       bug() {
-        return this.$store.state.bugs.find(b => b._id == this.bugId)
+        return this.$store.state.bugs.find(b => b._id == this.bugId) || {}
       }
     },
     methods: {
