@@ -1,12 +1,12 @@
 <template>
   <div class="bug-comments row">
     <div class="col-12 text-left">
-      <form v-if="!bug.closed" @submit.prevent="addComment">
+      <form v-if="!bug.closed" @submit="addComment">
         <span>Name</span><br>
         <input type="text" v-model="comment.creator" placeholder="Created by..."><br><br>
         <textarea rows="5" cols="60" type="text" v-model="comment.content" placeholder="Write comment here..."
           required></textarea><br>
-        <button type="button" class="btn btn-outline-success">Submit Comment</button>
+        <button type="button submit" class="btn btn-outline-success">Submit Comment</button>
       </form>
     </div>
     <div class="col-8 offset-2 text-left">
@@ -38,7 +38,6 @@
       return {
         comment: {
           content: '',
-          bug: this.bug._id,
           creator: '',
           user: 'Admin',
           flagged: "pending"
@@ -48,9 +47,8 @@
     },
     mounted() {
       let active = this.bug
-      if (this.$store.state.comments.length == 0) {
-        this.$store.dispatch('getComments', this.$route.params.bugId)
-      }
+      this.$store.dispatch('getComments', this.$route.params.bugId)
+
     },
     computed: {
       comments() {
@@ -59,6 +57,7 @@
     },
     methods: {
       addComment() {
+        this.comment.bug = this.bug._id
         this.$store.dispatch('addComment', this.comment)
       },
       deleteComment(comment) {
