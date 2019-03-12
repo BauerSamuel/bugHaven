@@ -50,7 +50,7 @@
   .description {
     border: 1px solid grey;
     border-radius: 8px;
-    margin-top: -15px
+    margin-top: 5px
   }
 
   h3 {
